@@ -1,0 +1,15 @@
+/* Add a black background color to the top navigation */
+.full-navbar {
+    max-width: none !important;
+  width: 100%;
+  background-color: rgb(189, 187, 187);
+
+  }
+  .brand {
+   
+    font-weight: bold;
+  }
+  .nav {
+    color:azure;
+
+  }
