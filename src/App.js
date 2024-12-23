@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
 import NavBar from "./components/NavBar";
-
+import SignOut from "./components/SignOut";
 
 function App() {
   return (
@@ -17,6 +17,7 @@ function App() {
       <Route path='/home' element={<Home />}/>
       <Route path='/login' element={<Login/>}/>
       <Route path='/signup' element={<SignUp />}/>
+      <Route path="/signout" element={<SignOut />} />
     </Routes>
   </Router>
   );

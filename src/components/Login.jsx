@@ -1,23 +1,27 @@
 import React from 'react'
+import './Login.css'
 const Login = () => {
   return (
-    <div >
+    <div className='container'>
+    <div className='loginCard'>
     <form>
-    <div className="mb-3 mt-3">
-        <label htmlFor='email'>Enter your email ID</label>
-        <input type='text' value="" placeholder='abc@gmail.com'/>
+    <div className="form-group">
+        <label htmlFor='email'>Enter your email ID : </label>
+        <input type='text' class="form-control" value="" placeholder='abc@gmail.com'/>
+        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
     </div>
-    <div className="mb-3">
-        <label  htmlFor='password'>Enter your Password</label>
-        <input class="form-control" type='password' value="" placeholder='*****'/>
+    <div className="form-group">
+        <label  htmlFor='password'>Enter your Password : </label>
+        <input  type='password' class="form-control" value="" placeholder='*****'/>
     </div>
-    <div class="form-check mb-3">
-    <label  htmlFor='checkbox'class="form-check-label">
+    <div class="form-group form-check">
+    <label  htmlFor='checkbox'>
       <input class="form-check-input" type="checkbox" value="" name="remember" /> Remember me
     </label>
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
  </form>
+ </div>
  </div>
   )
 }
