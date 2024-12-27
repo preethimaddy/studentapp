@@ -2,6 +2,8 @@ import React, { useState,useEffect } from "react";
 import "./SignUp.css";
 import { Row, Table, Alert } from "react-bootstrap";
 import axios from "axios"
+import { BiEdit } from "react-icons/bi";
+import { MdDelete } from "react-icons/md";
 const SignUp = (props) => {
   const initialState = {
     firstName: "",
@@ -46,15 +48,7 @@ const SignUp = (props) => {
     setNewInput(data);
   };
 
-  // post data
-const postData = async (newData) => {
-  const body = newInput;
-  const data = await axios.post(
-    `https://64818d7329fa1c5c503198d5.mockapi.io/user`,
-    body
-  );
-  console.log("post-data", data);
-};
+
   
 //handleSubmit
 
@@ -63,6 +57,7 @@ const handleSubmit =(e) =>{
   setTableRecord([...tableRecord, newInput]);
   setNewInput({firstName:"", lastName:"", email:"", gender:"", password:"", number:""})
 }
+
   // Add new input to form
 
   const addData = (e) => {
@@ -88,6 +83,26 @@ const handleSubmit =(e) =>{
       setAlert(true)
     }
   };
+  // post data
+const postData = async (newData) => {
+  const body = newInput;
+  const data = await axios.post(
+    `https://64818d7329fa1c5c503198d5.mockapi.io/user`,
+    body
+  );
+  console.log("post-data", data);
+};
+
+const editTrigger =()=>{
+
+}
+const deleteTableData =(index)=>{
+const data = [...tableRecord];
+data.splice(index, 1);
+setTableRecord(data);
+
+}
+
   return (
     <>
      <div className="m-3">
@@ -191,6 +206,8 @@ const handleSubmit =(e) =>{
                 <th>Gender</th>
                 <th>Password</th>
                 <th>Number</th>
+                <th>Edit</th>
+                <th>Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -206,6 +223,8 @@ const handleSubmit =(e) =>{
                         <td>{gender}</td>
                         <td>{password}</td>
                         <td>{number}</td>
+                        <td onClick={()=> editTrigger(index)} className="cursor-pointer"><BiEdit /></td>
+                        <td onClick={()=> deleteTableData(index,1)} className ="cursor-pointer"><MdDelete /></td>
                       </tr>
                     );
                   }
