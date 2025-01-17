@@ -54,13 +54,13 @@ const SignUp = (props) => {
 
 const handleSubmit =(e) =>{
   e.preventDefault();
-  setTableRecord([...tableRecord, newInput]);
-  setNewInput({firstName:"", lastName:"", email:"", gender:"", password:"", number:""})
-}
+  //setTableRecord([...tableRecord, newInput]);
+  // setNewInput({firstName:"", lastName:"", email:"", gender:"", password:"", number:""})
+
 
   // Add new input to form
 
-  const addData = (e) => {
+ 
     //form field validation
 
     const { firstName, lastName, email, gender, password, number } = newInput;
@@ -188,7 +188,7 @@ setTableRecord(data);
             </div>
             <br />
             <button type="submit" className="btn btn-primary"
-            onClick={addData}>
+            >
               Submit
             </button>
           </form>
