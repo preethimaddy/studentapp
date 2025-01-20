@@ -52,18 +52,10 @@ const SignUp = (props) => {
   
 //handleSubmit
 
-const handleSubmit =(e) =>{
+const handleSubmit = async (e) =>{
   e.preventDefault();
-  //setTableRecord([...tableRecord, newInput]);
-  // setNewInput({firstName:"", lastName:"", email:"", gender:"", password:"", number:""})
 
-
-  // Add new input to form
-
- 
-    //form field validation
-
-    const { firstName, lastName, email, gender, password, number } = newInput;
+  const { firstName, lastName, email, gender, password, number } = newInput;
     if (
       firstName !== "" &&
       lastName !== "" &&
@@ -72,12 +64,18 @@ const handleSubmit =(e) =>{
       password !== "" &&
       number !== ""
     ) {
-      const newData = [...tableRecord];
-      newData.push(newInput);
-      setTableRecord(newData);
-      setNewInput(initialState);
-      setAlert(false);
-      postData(newData)
+      try{
+        const response = await axios.post( `https://64818d7329fa1c5c503198d5.mockapi.io/user`,
+          newInput);
+          setTableRecord([...tableRecord, response.data]); // Add new record to state
+          setNewInput(initialState); // Reset form
+          setAlert(false);
+          
+      }
+    catch (error) {
+      console.error("Error adding record:", error);
+    }
+      
     }
     else{
       setAlert(true)
@@ -96,10 +94,21 @@ const postData = async (newData) => {
 const editTrigger =()=>{
 
 }
-const deleteTableData =(index)=>{
-const data = [...tableRecord];
-data.splice(index, 1);
-setTableRecord(data);
+
+// deleting table record from both end
+
+const deleteTableData =async (id)=>{
+//const data = [...tableRecord];
+try { const response = await axios.delete(`https://64818d7329fa1c5c503198d5.mockapi.io/user/${id}`);
+if (response.status === 200) {
+  setTableRecord((prevRecords) => prevRecords.filter((record) => record.id !== id));
+}
+else {
+  console.error("Failed to delete record:", response.statusText);
+}
+} catch (error) {
+console.error("Error deleting record:", error);
+}
 
 }
 
@@ -213,9 +222,9 @@ setTableRecord(data);
             <tbody>
               {tableRecord?.length > 0 &&
                 tableRecord.map(
-                  ({ firstName, lastName, email, password, gender, number }, index) => {
+                  ({ id, firstName, lastName, email, password, gender, number }, index) => {
                     return (
-                      <tr key={index}>
+                      <tr key={id}>
                         <td>{index + 1}</td>
                         <td>{firstName}</td>
                         <td>{lastName}</td>
