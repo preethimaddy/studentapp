@@ -99,10 +99,17 @@ const editTrigger =()=>{
 
 const deleteTableData =async (id)=>{
 //const data = [...tableRecord];
-try { const response = await axios.delete(`https://64818d7329fa1c5c503198d5.mockapi.io/user/${id}`);
-if (response.status === 200) {
-  setTableRecord((prevRecords) => prevRecords.filter((record) => record.id !== id));
-}
+try { 
+// Optimistically remove from the frontend
+  setTableRecord((prevRecords) =>
+     prevRecords.filter((record) => record.id !== id));
+  console.log(`Record with id ${id} deleted successfully`);
+
+  const response = await axios.delete(`https://64818d7329fa1c5c503198d5.mockapi.io/user/${id}`);
+
+  if(response.status === 200) {
+    console.log(`Record with ID ${id} successfully deleted.`);
+  } 
 else {
   console.error("Failed to delete record:", response.statusText);
 }
@@ -233,7 +240,7 @@ console.error("Error deleting record:", error);
                         <td>{password}</td>
                         <td>{number}</td>
                         <td onClick={()=> editTrigger(index)} className="cursor-pointer"><BiEdit /></td>
-                        <td onClick={()=> deleteTableData(index,1)} className ="cursor-pointer"><MdDelete /></td>
+                        <td onClick={()=> deleteTableData(id)} className ="cursor-pointer"><MdDelete /></td>
                       </tr>
                     );
                   }
