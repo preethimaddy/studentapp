@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from "react";
 import "./SignUp.css";
-import { Row, Table, Alert } from "react-bootstrap";
-import axios from "axios"
+import { Container,Row, Table, Alert } from "react-bootstrap";
+import axios from "axios";
 import { BiEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 const SignUp = (props) => {
@@ -13,32 +13,35 @@ const SignUp = (props) => {
     password:"",
     number:"",
   };
-
-
-
   const [newInput, setNewInput] = useState(initialState);
   console.log("NewInput", newInput);
   const [tableRecord, setTableRecord] = useState([]);
   console.log("TableRecord", tableRecord);
   const [alert, setAlert] = useState(false);
+  const[newpage, setNewpage] = useState(true);
+  console.log("NewPage", newpage);
+  const[editpage, setEditpage] = useState(false);
+  console.log("EditPage", editpage);
+const[editInput, setEditInput] = useState(null);
+  console.log("EditInput",editInput)
+const [editIndex, setEditIndex] = useState(null);
+console.log("editIndex", editIndex);
+  // function to get data
+  const getData = async () => {
+    try {
+      const data1 = await axios.get(
+        `https://64818d7329fa1c5c503198d5.mockapi.io/user`
+      );
+      const { data } = data1;
+      setTableRecord(data);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
-    // function to get data
-    const getData = async () => {
-      try {
-        const data1 = await axios.get(
-          `https://64818d7329fa1c5c503198d5.mockapi.io/user`
-        );
-        const { data } = data1;
-        setTableRecord(data);
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
-  
-    useEffect(() => {
-      getData();
-    }, []);
-  
+  useEffect(() => {
+    getData();
+  }, []);
 
   const handleInput = (e) => {
     e.preventDefault();
@@ -48,14 +51,28 @@ const SignUp = (props) => {
     setNewInput(data);
   };
 
+   const handleEdit = (e)=>{
+    e.preventDefault();
+    const {name, value} = e.target;
+    const data = {...editInput };
+    data[name] = value;
+    setEditInput(data)
+  }
+  //Edit Trigger
+  const editTrigger =(index)=>{
+    const editData = tableRecord[index];
+    setEditInput(editData);
+    setNewpage(false);
+    setEditpage(true);
+    setEditIndex(index)
+  }
+ 
+  //handleSubmit
 
-  
-//handleSubmit
+  const addData = async (e) => {
+    e.preventDefault();
 
-const handleSubmit = async (e) =>{
-  e.preventDefault();
-
-  const { firstName, lastName, email, gender, password, number } = newInput;
+    const { firstName, lastName, email, gender, password, number } = newInput;
     if (
       firstName !== "" &&
       lastName !== "" &&
@@ -65,75 +82,116 @@ const handleSubmit = async (e) =>{
       number !== ""
     ) {
       try{
-        const response = await axios.post( `https://64818d7329fa1c5c503198d5.mockapi.io/user`,
+        const response = await axios.post(`https://64818d7329fa1c5c503198d5.mockapi.io/user`,
           newInput);
-          setTableRecord([...tableRecord, response.data]); // Add new record to state
-          setNewInput(initialState); // Reset form
-          setAlert(false);
-          
+        setTableRecord([...tableRecord, response.data]); // Add new record to state
+        setNewInput(initialState); // Reset form
+        setAlert(false);
+         //postData(newData);
+      } catch (error) {
+        console.error("Error adding record:", error);
       }
-    catch (error) {
-      console.error("Error adding record:", error);
-    }
-      
-    }
-    else{
-      setAlert(true)
+    } else {
+      setAlert(true);
     }
   };
-  // post data
-const postData = async (newData) => {
-  const body = newInput;
-  const data = await axios.post(
-    `https://64818d7329fa1c5c503198d5.mockapi.io/user`,
-    body
-  );
-  console.log("post-data", data);
+
+  //EDIT PAGE
+
+
+  // deleting table record from both end
+
+  const deleteTableData = async (id) => {
+    //const data = [...tableRecord];
+    try {
+      // Optimistically remove from the frontend
+      setTableRecord((prevRecords) =>
+        prevRecords.filter((record) => record.id !== id));
+      console.log(`Record with id ${id} deleted successfully`);
+
+      const response = await axios.delete(`https://64818d7329fa1c5c503198d5.mockapi.io/user/${id}`);
+
+      if(response.status === 200) {
+        console.log(`Record with ID ${id} successfully deleted.`);
+      }
+      else {
+        console.error("Failed to delete record:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting record:", error);
+    }
+  }; 
+  // clear the data
+  const clearData = () => {
+  setNewInput (initialState);
+  }
+  
+  // clear editData Func
+  const clearEditData = () => {
+    setEditInput(initialState);
+  };
+const cancelData =(e) =>{
+  setNewpage(true);
+  setEditIndex(null);
+  setEditpage(false)
+}
+const addEditData = (e) => {
+  e.preventDefault();
+
+  const { firstName, lastName, email, gender, password, number,id } = editInput;
+  if (
+    firstName !== "" &&
+    lastName !== "" &&
+    email !== "" &&
+    gender !==""&&
+    password !== "" &&
+    number !== ""
+  ) {
+      const newData = [...tableRecord];
+      newData[editIndex] = editInput;
+      setTableRecord(newData); 
+      setEditInput(initialState); // Reset form
+      setAlert(false);
+      // postData(newData);
+   cancelData();
+   edit(id);
+  }
+  else{
+    setAlert(true);
+  }
 };
-
-const editTrigger =()=>{
-
-}
-
-// deleting table record from both end
-
-const deleteTableData =async (id)=>{
-//const data = [...tableRecord];
-try { 
-// Optimistically remove from the frontend
-  setTableRecord((prevRecords) =>
-     prevRecords.filter((record) => record.id !== id));
-  console.log(`Record with id ${id} deleted successfully`);
-
-  const response = await axios.delete(`https://64818d7329fa1c5c503198d5.mockapi.io/user/${id}`);
-
-  if(response.status === 200) {
-    console.log(`Record with ID ${id} successfully deleted.`);
-  } 
-else {
-  console.error("Failed to delete record:", response.statusText);
-}
-} catch (error) {
-console.error("Error deleting record:", error);
-}
-
-}
-
+  // edit data to server
+  const edit = async (id) => {
+    try {
+      const body = editInput;
+      const result = await axios.put(
+        `https://64818d7329fa1c5c503198d5.mockapi.io/user/${id}`,
+        body
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <>
-     <div className="m-3">
-     {alert &&(
-  <Alert   variant = {"danger"} dismissible  
-  className="custom-alert text-center"
-            onClick={() => setAlert(false)}>
-      Please fill All mandatory fields*
-  </Alert>
-)}
-     </div>
-      <div className="container">
+      <div className="m-3">
+        {alert && (
+          <Alert
+            variant={"danger"}
+            dismissible
+            className="custom-alert text-center"
+            onClick={() => setAlert(false)}
+          >
+            Please fill All mandatory fields*
+          </Alert>
+        )}
+      </div>
+      <Container>
+      {newpage ? ( 
+        <div className="container">
         <div className="signup">
-          <form className="form" onSubmit={handleSubmit}>
-         
+        <h3 className="text-center">Add New Data Form</h3>
+          <form className="form">
             <div className="form-group">
               <label htmlFor="firstName">Enter your firstName </label>
               <input
@@ -203,13 +261,111 @@ console.error("Error deleting record:", error);
               />
             </div>
             <br />
-            <button type="submit" className="btn btn-primary"
+            <div>
+            <button  onClick={addData} className="btn btn-primary"
             >
-              Submit
+              Add
             </button>
+            <button  onClick={clearData} className="btn btn-danger"
+            >
+              Clear
+            </button>
+            </div>
+         
           </form>
-        </div>
-      </div>
+          </div>
+          </div>):("")}
+          {editpage ? (
+             <div className="container">
+             <div className="signup">
+               <form className="form" >
+              <h3>Edit your old Data</h3>
+                 <div className="form-group">
+                   <label htmlFor="firstName">Enter your firstName </label>
+                   <input
+                     type="text"
+                     className="form-control"
+                     name="firstName"
+                     onChange={handleEdit}
+                     value={editInput?.firstName}
+                     placeholder="firstName"
+                   />
+                 </div>
+                 <div className="form-group">
+                   <label htmlFor="lastName">Enter your LastName</label>
+                   <input
+                     type="text"
+                     className="form-control"
+                     name="lastName"
+                     onChange={handleEdit}
+                     value={editInput?.lastName}
+                     placeholder="lastName"
+                   />
+                 </div>
+                 <div className="form-group">
+                   <label htmlFor="email">Enter your email ID</label>
+                   <input
+                     type="text"
+                     className="form-control"
+                     name="email"
+                     onChange={handleEdit}
+                     value={editInput?.email}
+                     placeholder="abc@gmail.com"
+                   />
+                 </div>
+                 <div>
+                   <label htmlFor="gender">Gender</label>
+                 <select
+                          name="gender"
+                          onChange={handleEdit}
+                          className="form-select" value={editInput?.gender} >
+                             
+                          <option value="">--select--</option>
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                          
+                        </select>
+                 </div>
+                 <div className="form-group">
+                   <label htmlFor="password">Enter your Password</label>
+                   <input
+                     className="form-control"
+                     type="password"
+                     name="password"
+                     onChange={handleEdit}
+                     value={editInput?.password}
+                     placeholder="*****"
+                   />
+                 </div>
+                 <div className="form-group">
+                   <label htmlFor="number">Enter your number</label>
+                   <input
+                     className="form-control"
+                     type="number"
+                     name="number"
+                     onChange={handleEdit}
+                     value={editInput?.number}
+                     placeholder="98XXXXXXX"
+                   />
+                 </div>
+                 <br />
+                 <button type="submit" className="btn btn-primary"  onClick={addEditData}
+                 >
+                   Submit
+                 </button>
+                 <button className="btn btn-danger"  onClick={clearEditData}
+                 >
+                   Clear
+                 </button>
+                 <button className="btn btn-warning"  onClick={cancelData}
+                 >
+                   Cancel
+                 </button>
+               </form>
+               </div>
+               </div>
+          ):("")}
+        
       <div className="div">
         <Row xs={6} md={6} className="p-4">
           <Table striped bordered hover>
@@ -229,7 +385,18 @@ console.error("Error deleting record:", error);
             <tbody>
               {tableRecord?.length > 0 &&
                 tableRecord.map(
-                  ({ id, firstName, lastName, email, password, gender, number }, index) => {
+                  (
+                    {
+                      id,
+                      firstName,
+                      lastName,
+                      email,
+                      password,
+                      gender,
+                      number,
+                    },
+                    index
+                  ) => {
                     return (
                       <tr key={id}>
                         <td>{index + 1}</td>
@@ -239,8 +406,18 @@ console.error("Error deleting record:", error);
                         <td>{gender}</td>
                         <td>{password}</td>
                         <td>{number}</td>
-                        <td onClick={()=> editTrigger(index)} className="cursor-pointer"><BiEdit /></td>
-                        <td onClick={()=> deleteTableData(id)} className ="cursor-pointer"><MdDelete /></td>
+                        <td
+                          onClick={() => editTrigger(index)}
+                          className="cursor-pointer"
+                        >
+                          <BiEdit />
+                        </td>
+                        <td
+                          onClick={() => deleteTableData(id)}
+                          className="cursor-pointer"
+                        >
+                          <MdDelete />
+                        </td>
                       </tr>
                     );
                   }
@@ -249,6 +426,7 @@ console.error("Error deleting record:", error);
           </Table>
         </Row>
       </div>
+      </Container>
     </>
   );
 };
