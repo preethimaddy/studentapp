@@ -4,6 +4,8 @@ import { Container,Row, Table, Alert } from "react-bootstrap";
 import axios from "axios";
 import { BiEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
+import Card from 'react-bootstrap/Card';
+
 const SignUp = (props) => {
   const initialState = {
     firstName: "",
@@ -186,7 +188,7 @@ const addEditData = (e) => {
           </Alert>
         )}
       </div>
-      <Container>
+      <Container class="container my-4">
       {newpage ? ( 
         <div className="container">
         <div className="signup">
@@ -427,7 +429,41 @@ const addEditData = (e) => {
         </Row>
       </div>
       </Container>
+      <Container className="container bg-light my-4" style={{ display: 'flex', justifyContent: 'flex-start' }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+          {tableRecord.map((tableRecord, index, id) =>(
+             <Card key={index} className="shawdow-lg p-4">
+             <div>
+              <h5 className="text-lg font-bold">
+                {tableRecord.firstName} {tableRecord.lastName} 
+                </h5>
+                <p><span  style={{fontWeight: 'bold'}}> Email: </span>{tableRecord.email}</p>
+                <p><span  style={{fontWeight: 'bold'}}> Gender: </span> {tableRecord.gender}</p>
+                <p><span  style={{fontWeight: 'bold'}}> Password: </span>{tableRecord.password}</p>
+                <p><span  style={{fontWeight: 'bold'}}> Number: </span>{tableRecord.number}</p>
+             </div>
+             <div>
+             <button
+                          onClick={() => editTrigger(index)}
+                          className="cursor-pointer"
+                        >
+                          <BiEdit />
+                        </button>
+                        <button
+                          onClick={() => deleteTableData(id)}
+                          className="cursor-pointer"
+                        >
+                          <MdDelete />
+                        </button>
+             </div>
+             </Card>
+          ))}
+       
+        </div>
+    
+      </Container>
     </>
+
   );
 };
 
