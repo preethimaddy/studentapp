@@ -445,18 +445,21 @@ const addEditData = (e) => {
                 <p><span  style={{fontWeight: 'bold'}}> Number: </span>{tableRecord.number}</p>
              </div>
              <div>
-             <button
+              <div className="d-flex gap-2 mt-2" >
+              <button 
                           onClick={() => editTrigger(index)}
-                          className="cursor-pointer"
+                          className="btn btn-primary"
                         >
                           <BiEdit />
                         </button>
                         <button
                           onClick={() => deleteTableData(id)}
-                          className="cursor-pointer"
+                         className="btn btn-danger"
                         >
                           <MdDelete />
                         </button>
+              </div>
+             
              </div>
              </Card>
              </Row>
