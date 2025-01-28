@@ -170,9 +170,11 @@ const addEditData = (e) => {
         `https://64818d7329fa1c5c503198d5.mockapi.io/user/${id}`,
         body
       );
+      console.log("Updated user:", result.data);
     } catch (error) {
       console.error(error);
     }
+    
   };
   return (
     <>
@@ -453,7 +455,7 @@ const addEditData = (e) => {
                           <BiEdit />
                         </button>
                         <button
-                          onClick={() => deleteTableData(id)}
+                          onClick={() => deleteTableData(tableRecord.id)}
                          className="btn btn-danger"
                         >
                           <MdDelete />
