@@ -430,12 +430,14 @@ const addEditData = (e) => {
       </div>
       </Container>
       <Container className="container bg-light my-4" style={{ display: 'flex', justifyContent: 'flex-start' }}>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+        <div className="d-flex flex-wrap ">
           {tableRecord.map((tableRecord, index, id) =>(
-             <Card key={index} className="shawdow-lg p-4">
+            <div className="card-container flex overflow-x-auto space-x-4 p-4">
+               <Row >
+             <Card key={index} className="shawdow-lg p-4" style={{ display:"flex", }}>
              <div>
               <h5 className="text-lg font-bold">
-                {tableRecord.firstName} {tableRecord.lastName} 
+             {tableRecord.firstName} {tableRecord.lastName} 
                 </h5>
                 <p><span  style={{fontWeight: 'bold'}}> Email: </span>{tableRecord.email}</p>
                 <p><span  style={{fontWeight: 'bold'}}> Gender: </span> {tableRecord.gender}</p>
@@ -457,6 +459,8 @@ const addEditData = (e) => {
                         </button>
              </div>
              </Card>
+             </Row>
+             </div>
           ))}
        
         </div>
