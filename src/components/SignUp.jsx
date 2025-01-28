@@ -433,8 +433,8 @@ const addEditData = (e) => {
       </Container>
       <Container className="container bg-light my-4" style={{ display: 'flex', justifyContent: 'flex-start' }}>
         <div className="d-flex flex-wrap ">
-          {tableRecord.map((tableRecord, index, id) =>(
-            <div className="card-container flex overflow-x-auto space-x-4 p-4">
+          {tableRecord.map((tableRecord, index) =>(
+            <div key={tableRecord.id || index} className="card-container flex overflow-x-auto space-x-4 p-4">
                <Row >
              <Card key={index} className="shawdow-lg p-4" style={{ display:"flex", }}>
              <div>
