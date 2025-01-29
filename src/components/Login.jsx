@@ -13,7 +13,7 @@ const Login = () => {
   console.log("Password", password);
  
   return (
-    <div className='container'>
+    <div className='container my-4'>
     <div className='loginCard'>
     <form>
     <div className="form-group">
