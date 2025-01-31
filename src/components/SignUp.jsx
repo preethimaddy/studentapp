@@ -5,7 +5,7 @@ import axios from "axios";
 import { BiEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import Card from 'react-bootstrap/Card';
-
+import { Eye, EyeOff } from "lucide-react";
 const SignUp = (props) => {
   const initialState = {
     firstName: "",
@@ -28,6 +28,8 @@ const[editInput, setEditInput] = useState(null);
   console.log("EditInput",editInput)
 const [editIndex, setEditIndex] = useState(null);
 console.log("editIndex", editIndex);
+const[showPassword, setShowPassword] = useState(false);
+console.log("showPassword",)
   // function to get data
   const getData = async () => {
     try {
@@ -254,6 +256,13 @@ const addEditData = (e) => {
                 value={newInput?.password}
                 placeholder="*****"
               />
+               <button
+        type="button"
+        onClick={() => setShowPassword(!showPassword)}
+        className="absolute right-3 top-2 text-gray-600 hover:text-gray-800"
+      >
+        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+      </button>
             </div>
             <div className="form-group">
               <label htmlFor="number">Enter your number</label>
