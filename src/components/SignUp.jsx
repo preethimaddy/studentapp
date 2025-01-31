@@ -105,6 +105,8 @@ console.log("editIndex", editIndex);
 
   const deleteTableData = async (id) => {
     //const data = [...tableRecord];
+    const isConfirmed = window.confirm("Are you sure you want to delete this record? Your data will be lost permanently :(");
+    if (!isConfirmed) return;
     try {
       // Optimistically remove from the frontend
       setTableRecord((prevRecords) =>
