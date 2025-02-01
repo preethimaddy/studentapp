@@ -5,7 +5,7 @@ import axios from "axios";
 import { BiEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import Card from 'react-bootstrap/Card';
-import { Eye, EyeOff } from "lucide-react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 const SignUp = (props) => {
   const initialState = {
     firstName: "",
@@ -249,20 +249,35 @@ const addEditData = (e) => {
             <div className="form-group">
               <label htmlFor="password">Enter your Password</label>
               <input
-                className="form-control"
-                type="password"
-                name="password"
-                onChange={handleInput}
-                value={newInput?.password}
-                placeholder="*****"
-              />
-               <button
-        type="button"
+        className="form-control"
+        type={showPassword ? "text" : "password"}
+        name="password"
+        onChange={handleInput}
+        value={newInput?.password}
+        placeholder="*****"
+        style={{
+          width: "100%",
+          padding: "10px",
+          paddingRight: "40px", // Space for the icon
+          fontSize: "16px",
+          border: "1px solid #ccc",
+          borderRadius: "5px",
+        }}
+      />
+      <span
         onClick={() => setShowPassword(!showPassword)}
-        className="absolute right-3 top-2 text-gray-600 hover:text-gray-800"
+        style={{
+          position: "absolute",
+          right: "10px",
+          top: "50%",
+          transform: "translateY(-50%)",
+          cursor: "pointer",
+          fontSize: "18px",
+          color: "#666",
+        }}
       >
-        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-      </button>
+        {showPassword ? <FaEyeSlash /> : <FaEye />}
+      </span>
             </div>
             <div className="form-group">
               <label htmlFor="number">Enter your number</label>
