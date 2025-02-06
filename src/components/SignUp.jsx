@@ -264,7 +264,7 @@ const addEditData = (e) => {
           borderRadius: "5px",
         }}
       />
-      <span
+      {/* <span
         onClick={() => setShowPassword(!showPassword)}
         style={{
           position: "absolute",
@@ -277,7 +277,7 @@ const addEditData = (e) => {
         }}
       >
         {showPassword ? <FaEyeSlash /> : <FaEye />}
-      </span>
+      </span> */}
             </div>
             <div className="form-group">
               <label htmlFor="number">Enter your number</label>
@@ -469,7 +469,18 @@ const addEditData = (e) => {
                 </h5>
                 <p><span  style={{fontWeight: 'bold'}}> Email: </span>{tableRecord.email}</p>
                 <p><span  style={{fontWeight: 'bold'}}> Gender: </span> {tableRecord.gender}</p>
-                <p><span  style={{fontWeight: 'bold'}}> Password: </span>{tableRecord.password}</p>
+                <p>
+          <span style={{ fontWeight: "bold" }}>Password:</span>{" "}
+          {showPassword ? tableRecord.password : "********"}
+          <button
+            type="button"
+            className="ml-2 text-gray-500"
+            onClick={() => setShowPassword(!showPassword)}
+            style={{ background: "none", border: "none", cursor: "pointer" }}
+          >
+            {showPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
+          </button>
+        </p>
                 <p><span  style={{fontWeight: 'bold'}}> Number: </span>{tableRecord.number}</p>
              </div>
              <div>
