@@ -264,7 +264,7 @@ const addEditData = (e) => {
           borderRadius: "5px",
         }}
       />
-      {/* <span
+{/* <span
         onClick={() => setShowPassword(!showPassword)}
         style={{
           position: "absolute",
@@ -428,7 +428,7 @@ const addEditData = (e) => {
                     index
                   ) => {
                     return (
-                      <tr key={id}>
+                      <tr key={id || index}>
                         <td>{index + 1}</td>
                         <td>{firstName}</td>
                         <td>{lastName}</td>
@@ -459,8 +459,11 @@ const addEditData = (e) => {
       </Container>
       <Container className="container bg-light my-4" style={{ display: 'flex', justifyContent: 'flex-start' }}>
         <div className="d-flex flex-wrap ">
-          {tableRecord.map((tableRecord, index) =>(
-            <div key={tableRecord.id || index} className="card-container flex overflow-x-auto space-x-4 p-4">
+          {tableRecord.map((tableRecord, index) =>{
+             const isPasswordVisible = showPassword === index;
+
+            return (
+              <div key={tableRecord.id || index} className="card-container flex overflow-x-auto space-x-4 p-4">
                <Row >
              <Card key={index} className="shawdow-lg p-4" style={{ display:"flex", }}>
              <div>
@@ -471,14 +474,14 @@ const addEditData = (e) => {
                 <p><span  style={{fontWeight: 'bold'}}> Gender: </span> {tableRecord.gender}</p>
                 <p>
           <span style={{ fontWeight: "bold" }}>Password:</span>{" "}
-          {showPassword ? tableRecord.password : "********"}
+          {isPasswordVisible ? tableRecord.password : "********"}
           <button
             type="button"
             className="ml-2 text-gray-500"
-            onClick={() => setShowPassword(!showPassword)}
+            onClick={() => setShowPassword(isPasswordVisible ? null:index)}
             style={{ background: "none", border: "none", cursor: "pointer" }}
           >
-            {showPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
+            {isPasswordVisible ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
           </button>
         </p>
                 <p><span  style={{fontWeight: 'bold'}}> Number: </span>{tableRecord.number}</p>
@@ -503,7 +506,9 @@ const addEditData = (e) => {
              </Card>
              </Row>
              </div>
-          ))}
+            )
+          }
+          )}
        
         </div>
     
